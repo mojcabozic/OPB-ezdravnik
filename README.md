@@ -4,7 +4,7 @@
 
 ## Funkcionalnosti
 
-- Uporabnik se lahko prijavi v svoj profil kot pacient.
+- Uporabnik se lahko prijavi v svoj profil kot pacient, s svojim **emailom** in nekim **geslom**.
 - Izbere lahko želeni **oddelek** ali neposredno **zdravnika**, ki na njem dela.
 - Na voljo so prosti **termini za pregled**, med katerimi uporabnik izbere ustreznega.
 - Ob rezervaciji termina lahko uporabnik **vpiše opis težav**, zaradi katerih prihaja na pregled.
