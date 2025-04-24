@@ -1,5 +1,6 @@
 CREATE TABLE Pacient (
     id_pacienta serial NOT NULL primary key,
+    ime_pacienta varchar NOT NULL,
     uporabnisko_ime text NOT NULL,
     geslo varchar NOT NULL,
     starost int NOT NULL,
@@ -28,3 +29,4 @@ CREATE TABLE Pregled (
     pacient int REFERENCES Pacient(id_pacienta),
     zdravnik int REFERENCES Zdravnik(id_zdravnika)
 );
+
