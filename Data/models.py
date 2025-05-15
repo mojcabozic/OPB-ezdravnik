@@ -53,6 +53,13 @@ class oddelek:
 
 @dataclass_json
 @dataclass
+class oddelekDto:
+    id_oddelka : int = field(default=0)  
+    ime_oddelka : str = field(default="")
+    lokacija : str = field(default="")
+
+@dataclass_json
+@dataclass
 class pregled:
     id_pregleda : int = field(default=0)  
     datum : datetime = field(default=datetime.now)
