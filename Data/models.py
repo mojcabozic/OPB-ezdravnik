@@ -77,3 +77,12 @@ class pregledDto:
     zdravnik : int = field(default=0)
     
 
+@dataclass_json
+@dataclass
+class Uporabnik:
+    username: str = field(default="")
+    password_hash: str = field(default="")
+
+@dataclass
+class UporabnikDto:
+    username: str = field(default="")
