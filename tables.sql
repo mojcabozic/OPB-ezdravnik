@@ -30,3 +30,5 @@ CREATE TABLE Pregled (
     zdravnik int REFERENCES Zdravnik(id_zdravnika)
 );
 
+DROP TABLE deli_premozenje;
+
