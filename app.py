@@ -1,13 +1,11 @@
 from functools import wraps
 from Presentation.bottleext import get, post, run, request, template, redirect, static_file, url, response, template_user
 
-from Services.transakcije_service import TransakcijeService
+from Services.pregledi_service import PreglediService
 from Services.auth_service import AuthService
 import os
 
 # Ustvarimo instance servisov, ki jih potrebujemo. 
-# Če je število servisov veliko, potem je service bolj smiselno inicializirati v metodi in na
-# začetku datoteke (saj ne rabimo vseh servisov v vseh metodah!)
 
 service = PreglediService()
 auth = AuthService()
@@ -39,12 +37,14 @@ def static(filename):
 @cookie_required
 def index():
     """
-    Domača stran s pregledi uporabnika (profil)
+    Domača stran s pregledi uporabnika (profil).
     """   
   
     pregledi_dto = service.dobi_preglede_pacient()  
         
     return template_user('profil.html', pregledi = pregledi_dto)
+
+
 
 @get('/pregled')
 @cookie_required
@@ -55,7 +55,6 @@ def index():
   
     pregled = service.dobi_pregled()
     return template_user('pregled.html', pregled = pregled)
-
 
 
 @get('/dodaj_pregled')
