@@ -10,7 +10,7 @@ from typing import List
 # Preberemo port za bazo iz okoljskih spremenljivk
 DB_PORT = os.environ.get('POSTGRES_PORT', 5432)
 
-## V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
+# V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
 
 class Repo:
     def __init__(self):
@@ -113,9 +113,13 @@ class Repo:
             """, (t.datum, t.cas, t.opis, t.pacient, t.zdravnik))
         self.conn.commit()
 
-    def posodobi_pregled(self, t : pregled):
+    def dobi_oddelke(self) -> oddelek:
         self.cur.execute("""
-            Update pregled set datum = %s,  cas=%s, opis = %s, pacient = %s, zdravnik = %s where id_pregleda = %s
-            """, (t.datum, t.cas, t.opis, t.zdravnik, t.pacient, t.id_pregleda))
-        self.conn.commit()
+            SELECT id_oddelka, ime_oddelka, lokacija
+            FROM oddelek
+        """)
+         
+        o = oddelek.from_dict(self.cur.fetchone())
+        return o
+
 
