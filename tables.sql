@@ -2,7 +2,8 @@ CREATE TABLE Pacient (
     id_pacienta serial NOT NULL primary key,
     ime_pacienta varchar NOT NULL,
     uporabnisko_ime text NOT NULL,
-    geslo varchar NOT NULL,
+    geslo varchar NOT NULL, 
+    -- geslo hash
     starost int NOT NULL,
     CHECK (starost >= 0),
     spol varchar NOT NULL,
@@ -30,5 +31,8 @@ CREATE TABLE Pregled (
     zdravnik int REFERENCES Zdravnik(id_zdravnika)
 );
 
-DROP TABLE deli_premozenje;
+CREATE TABLE Lokacija (
+    id_lokacije integer NOT NULL primary key,
+    naslov text
+)
 

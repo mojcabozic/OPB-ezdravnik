@@ -2,3 +2,4 @@ env/*
 *pycache*
 *DS_Store
 *auth_private.py
+*venv

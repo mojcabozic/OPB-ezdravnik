@@ -1,4 +1,5 @@
 database = 'opb2025_bozicmo'
 host = 'baza.fmf.uni-lj.si'
-user = 'javnost'
-password = 'javno'
+port = '5432'
+user = 'bozicmo'
+password = 'j92gt52w'
