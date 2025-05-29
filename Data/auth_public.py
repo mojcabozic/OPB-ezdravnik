@@ -1,4 +1,4 @@
-database = 'opb2025_bozicmo'
+db = 'opb2025_bozicmo'
 host = 'baza.fmf.uni-lj.si'
 port = '5432'
 user = 'bozicmo'
