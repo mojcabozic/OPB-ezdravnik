@@ -1,5 +1,9 @@
-db = 'opb2025_bozicmo'
-host = 'baza.fmf.uni-lj.si'
-port = '5432'
-user = 'bozicmo'
-password = 'j92gt52w'
+try:
+    from Data.auth_private import *
+except Exception:
+    print("Manjka Data/auth_private.py")
+
+try:
+    from auth_private import *
+except Exception:
+    print("Manjka Data/auth_private.py")
