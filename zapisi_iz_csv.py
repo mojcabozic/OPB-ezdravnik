@@ -9,6 +9,8 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo prob
 import Data.auth_public as auth
 import csv
 
+import hashlib
+
 # Ustvarimo povezavo
 conn = psycopg2.connect(
     database = auth.db,
@@ -25,6 +27,7 @@ conn = psycopg2.connect(
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
+# funkcija, ki vrne data type vsakega stolpca tabele 
 def get_datatypes(table_name):
     cur.execute("""                              
         SELECT column_name, data_type, is_nullable
@@ -41,12 +44,15 @@ def get_datatypes(table_name):
         data_type = item[1]
         out[key] = data_type
     return out
-    
+
+
 tabele = [
     "lokacija",
     "oddelek",
-    "zdravnik"
+    "zdravnik",
+    "pacient"
 ]
+
 
 for ime_tabele in tabele:
     podatkovni_tipi = get_datatypes(ime_tabele) # slovar 
@@ -57,16 +63,27 @@ for ime_tabele in tabele:
         reader = csv.DictReader(csvfile)
         for row in reader:
             columns = row.keys()
-
+            
             # Pretvorimo podatkovni tip 
             for column in columns:
-                if podatkovni_tipi[column] == 'integer':
+                if column == 'geslo':
+                    continue
+                elif podatkovni_tipi[column] == 'integer':
                     row[column] = int(row[column])
+
+            seznam_ključev = list(columns)
+            for ključ in seznam_ključev:
+                # za hashiranje gesel
+                if ključ == 'geslo':
+                    hash_object = hashlib.sha256(row[ključ].encode())
+                    hex_dig = hash_object.hexdigest()
+                    row['geslo_hash'] = hex_dig
+                    del(row['geslo'])       
 
             query = sql.SQL("INSERT INTO {table} ({fields}) VALUES ({placeholders})").format(
                 table=sql.Identifier(ime_tabele),
                 fields=sql.SQL(', ').join(map(sql.Identifier, columns)),
-                # placeholder je vec al manj %s
+                # placeholder je %s
                 placeholders=sql.SQL(', ').join(sql.Placeholder() * len(columns))
             )
             cur.execute(query, list(row.values()))

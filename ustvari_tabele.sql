@@ -8,7 +8,6 @@ CREATE TABLE Pacient (
     id_pacienta integer NOT NULL primary key,
     ime_pacienta varchar NOT NULL,
     uporabnisko_ime text NOT NULL,
-    geslo varchar NOT NULL, 
     geslo_hash varchar NOT NULL,
     datum_rojstva date NOT NULL,
     spol varchar NOT NULL,

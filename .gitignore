@@ -3,3 +3,4 @@ env/*
 *DS_Store
 *auth_private.py
 *venv
+*pacient.csv
