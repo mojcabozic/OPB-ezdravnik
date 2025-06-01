@@ -89,18 +89,29 @@ class Repo:
         self.cur.execute("""
             SELECT id_pacienta, ime_pacienta, starost, spol, reden
             FROM pacient
-        """)
+            WHERE id_pacienta = %s
+        """, (id_pacienta,))
          
         p = pacient.from_dict(self.cur.fetchone())
         return p
     
-    def dobi_preglede_pacient(self, pacient : str) -> List[pregled]:
-        pregled = self.dobi_pregled(id)
+    def dobi_id_pacienta(self, uporabnisko_ime : str) -> str: # iz uporabniskega imena paceinta dobimo njegov id
+        self.cur.execute("""
+            SELECT id_pacienta, uporabnisko_ime
+            FROM pacient
+            WHERE uporabnisko_ime = %s
+        """, (uporabnisko_ime,))
+
+        u = pacient.from_dict(self.cur.fetchone())
+        return u
+
+    def dobi_preglede_pacient(self, id_pacienta : str) -> List[pregled]:
+        
         self.cur.execute("""
             SELECT id_pregleda, datum, cas, opis, pacient, zdravnik
             FROM pregled
             WHERE pacient = %s
-        """, (pregled.id_pregleda,))
+        """, (id_pacienta,))
         
         # rezultate querya pretovrimo v python seznam objektov (transkacij)
         pregledi = [pregled.from_dict(t) for t in self.cur.fetchall()]

@@ -24,7 +24,7 @@ def cookie_required(f):
         cookie = request.get_cookie("uporabnik")
         if cookie:
             return f(*args, **kwargs)
-        return template("prijava.html",uporabnik=None, napaka="Potrebna je prijava!")
+        return template("prijava.html",uporabnik=None, napaka="PZa dostop do strani je potrebna prijava!")
         
     return decorated
 
@@ -39,8 +39,13 @@ def index():
     """
     Domača stran s pregledi uporabnika (profil).
     """   
-  
-    pregledi_dto = service.dobi_preglede_pacient()  
+    # iz piškotka dobimo uporabniško ime prijavljenega pacienta
+    uporabniško_ime = request.get_cookie("uporabnik")
+
+    # iz uporabniškega imena dobimo id pacienta
+    id_pacienta = service.dobi_id_pacienta(uporabniško_ime)
+
+    pregledi_dto = service.dobi_preglede_pacient(id_pacienta)  
         
     return template_user('profil.html', pregledi = pregledi_dto)
 
@@ -68,15 +73,16 @@ def dodaj_pregled():
 @post('/dodaj_pregled')
 def dodaj_pregled_post():
     # Preberemo podatke iz forme (oddelek, zdravnik, datum, termin, opis)
-
     oddelek = int(request.forms.get('oddelek'))
     zdravnik = float(request.forms.get('zdravnik'))
     opis = request.forms.get('opis')
     datum = request.forms.get('datum')
     termin = request.forms.get('termin')
 
-    service.naredi_pregled(oddelek, zdravnik, opis, datum, termin)
-    
+    # iz piškotka dobimo podatek o prijavljenem uporabniku
+    uporabniško_ime = request.get_cookie("uporabnik")
+
+    service.naredi_pregled(uporabniško_ime, oddelek, zdravnik, opis, datum, termin)
     
     redirect(url('/'))
 
