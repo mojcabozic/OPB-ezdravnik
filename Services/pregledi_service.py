@@ -23,6 +23,8 @@ class PreglediService:
     def dobi_preglede_dto(self) -> List[pregled]:
         return self.repo.dobi_preglede_dto()
     
+    def dobi_oddelke(self) -> List[oddelek]:
+        return self.repo.dobi_oddelke()
 
     def dodaj_pregled_pacient(self, p: pacient, z: zdravnik, datum: str, cas: str, opis: str) -> None:
         # naredimo objekt za pregled; potrebujemo id pacienta in zdravnika
@@ -39,6 +41,9 @@ class PreglediService:
 
     def dobi_id_pacienta(self, uporabnisko_ime: str) -> int:
         return self.repo.dobi_id_pacienta(uporabnisko_ime)
+    
+    def dobi_zdravnike_po_oddelkih(self) -> List[zdravnikDto]:
+        return self.repo.dobi_zdravnike_po_oddelkih()
 
 
         

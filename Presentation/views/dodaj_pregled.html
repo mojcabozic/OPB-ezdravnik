@@ -1,0 +1,57 @@
+<%
+import json
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nov pregled</title>
+</head>
+<body>
+    <form action="/dodaj_pregled" method="post">
+        <select name="id_oddelka" required>
+            <option value="" selected disabled="disabled" >Izberi oddelek</option>
+            % for oddelek in oddelki:
+                <option value="{{ oddelek.id_oddelka }}">{{ oddelek.ime_oddelka }}</option>
+            % end
+        </select>
+        <select name="id_zdravnika" required id="zdravnik_select" disabled>
+            <option value="">Izberi zdravnika</option>
+        </select>
+        <input type="submit" value="Dodaj pregled">
+    </form>
+</body>
+<script>
+    const zdravniki_po_oddelkih = {{! zdravniki_po_oddelkih_json }};
+
+    const posodobi_zdravnik_select = (id_oddelka) => {
+        const zdravnikSelect = document.getElementById('zdravnik_select');
+        zdravnikSelect.innerHTML = ''; // Clear previous options
+        zdravnikSelect.disabled = false; // Enable the select element
+
+        if (zdravniki_po_oddelkih[id_oddelka]) {
+            const option = document.createElement('option');
+            option.value = ""
+            option.textContent = `Izberi zdravnika`;
+            zdravnikSelect.appendChild(option);
+            zdravnikSelect.disabled = false; // Enable the select element
+
+            zdravniki_po_oddelkih[id_oddelka].forEach(zdravnik => {
+                const option = document.createElement('option');
+                option.value = zdravnik.id_zdravnika;
+                option.textContent = `${zdravnik.ime_zdravnika}`;
+                zdravnikSelect.appendChild(option);
+            });
+        }
+    };
+
+    document.querySelector('select[name="id_oddelka"]').addEventListener('change', function() {
+        const id_oddelka = this.value;
+        if (id_oddelka) {
+            posodobi_zdravnik_select(id_oddelka);
+        }
+    });
+</script>
+</html>

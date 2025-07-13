@@ -3,6 +3,7 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo prob
 import Data.auth_public as auth
 import datetime
 import os
+from collections import defaultdict
 
 from Data.models import pacient, zdravnik, pacientDto, pregled, oddelek, oddelekDto, zdravnikDto, pregledDto
 from typing import List
@@ -130,8 +131,8 @@ class Repo:
             FROM oddelek
         """)
          
-        o = oddelek.from_dict(self.cur.fetchone())
-        return o
+        oddelki = [oddelek.from_dict(t) for t in self.cur.fetchall()]
+        return oddelki
 
     def dobi_uporabnika(self, uporabnisko_ime : str) -> pacient:
         self.cur.execute("""
@@ -142,3 +143,19 @@ class Repo:
 
         p = pacient.from_dict(self.cur.fetchone())
         return p
+    
+    def dobi_zdravnike_po_oddelkih(self) -> dict[str, List[zdravnikDto]]:
+        self.cur.execute("""
+            SELECT o.id_oddelka, z.id_zdravnika, z.ime_zdravnika
+            FROM oddelek o
+            LEFT JOIN zdravnik z ON o.id_oddelka = z.oddelek
+            
+        """)
+        
+        slovar = defaultdict(list)
+        for row in self.cur.fetchall():
+            id_oddelka, id_zdravnika, ime_zdravnika = row
+            zdravnik_dto = zdravnikDto(id_zdravnika=id_zdravnika, ime_zdravnika=ime_zdravnika, oddelek=id_oddelka)
+            slovar[id_oddelka].append(zdravnik_dto)
+        
+        return slovar

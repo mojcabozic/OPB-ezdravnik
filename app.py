@@ -4,6 +4,7 @@ from Presentation.bottleext import get, post, run, request, template, redirect, 
 from Services.pregledi_service import PreglediService
 from Services.auth_service import AuthService
 import os
+import json
 
 # Ustvarimo instance servisov, ki jih potrebujemo. 
 
@@ -65,9 +66,13 @@ def index():
 @get('/dodaj_pregled')
 def dodaj_pregled():
     """
-    Stran za dodajanje pregleda.  """
+    Stran za dodajanje pregleda.  
+    """
     oddelki = service.dobi_oddelke()
-    return template_user('dodaj_pregled.html', oddelki=oddelki)
+    # dobimo slovar oddelkov z zdravniki, ki so v teh oddelkih
+    zdravniki_po_oddelkih = service.dobi_zdravnike_po_oddelkih()
+    zdravniki_po_oddelkih_json = json.dumps({x:[y.to_dict() for y in zdravniki_po_oddelkih[x]] for x in zdravniki_po_oddelkih})
+    return template_user('dodaj_pregled.html', oddelki=oddelki, zdravniki_po_oddelkih_json=zdravniki_po_oddelkih_json)
 
 
 @post('/dodaj_pregled')
