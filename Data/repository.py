@@ -14,7 +14,7 @@ DB_PORT = os.environ.get('POSTGRES_PORT', 5432)
 
 class Repo:
     def __init__(self):
-        # Ko ustvarimo novo instanco definiramo objekt za povezavo in cursor
+        # Ko ustvarimo novo instanco, definiramo objekt za povezavo in cursor
         self.conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password, port=DB_PORT)
         self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
@@ -97,15 +97,15 @@ class Repo:
     
     def dobi_id_pacienta(self, uporabnisko_ime : str) -> str: # iz uporabniskega imena paceinta dobimo njegov id
         self.cur.execute("""
-            SELECT id_pacienta, uporabnisko_ime
+            SELECT id_pacienta
             FROM pacient
             WHERE uporabnisko_ime = %s
         """, (uporabnisko_ime,))
 
-        u = pacient.from_dict(self.cur.fetchone())
-        return u
+        return self.cur.fetchone()[0]
 
-    def dobi_preglede_pacient(self, id_pacienta : str) -> List[pregled]:
+
+    def dobi_preglede_pacient(self, id_pacienta : int) -> List[pregled]:
         
         self.cur.execute("""
             SELECT id_pregleda, datum, cas, opis, pacient, zdravnik
@@ -133,4 +133,12 @@ class Repo:
         o = oddelek.from_dict(self.cur.fetchone())
         return o
 
+    def dobi_uporabnika(self, uporabnisko_ime : str) -> pacient:
+        self.cur.execute("""
+            SELECT uporabnisko_ime, geslo_hash
+            FROM pacient
+            WHERE uporabnisko_ime = %s
+        """, (uporabnisko_ime,))
 
+        p = pacient.from_dict(self.cur.fetchone())
+        return p

@@ -9,7 +9,7 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo prob
 import Data.auth_public as auth
 import csv
 
-import hashlib
+import bcrypt
 
 # Ustvarimo povezavo
 conn = psycopg2.connect(
@@ -25,6 +25,17 @@ conn = psycopg2.connect(
 # zaganjanje ukazov na bazi
 
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+with open("ustvari_tabele.sql", 'r', encoding='utf-8') as f:
+    sql_script = f.read()
+
+print("Brišem obstoječe tabele, če obstajajo ...")
+# Izvedemo SQL skripto, ki ustvari tabele
+cur.execute(sql_script)
+# write changes to the database
+conn.commit()
+print("Tabele so bile uspešno ustvarjene.")
+
 
 
 # funkcija, ki vrne data type vsakega stolpca tabele 
@@ -75,9 +86,9 @@ for ime_tabele in tabele:
             for ključ in seznam_ključev:
                 # za hashiranje gesel
                 if ključ == 'geslo':
-                    hash_object = hashlib.sha256(row[ključ].encode())
-                    hex_dig = hash_object.hexdigest()
-                    row['geslo_hash'] = hex_dig
+                    salt = bcrypt.gensalt()
+                    hash1 = bcrypt.hashpw(row[ključ].encode('utf-8'), salt)
+                    row['geslo_hash'] = hash1.decode()
                     del(row['geslo'])       
 
             query = sql.SQL("INSERT INTO {table} ({fields}) VALUES ({placeholders})").format(

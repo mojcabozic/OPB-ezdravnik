@@ -24,7 +24,7 @@ def cookie_required(f):
         cookie = request.get_cookie("uporabnik")
         if cookie:
             return f(*args, **kwargs)
-        return template("prijava.html",uporabnik=None, napaka="PZa dostop do strani je potrebna prijava!")
+        redirect(url('/prijava'))
         
     return decorated
 
@@ -40,14 +40,14 @@ def index():
     Domača stran s pregledi uporabnika (profil).
     """   
     # iz piškotka dobimo uporabniško ime prijavljenega pacienta
-    uporabniško_ime = request.get_cookie("uporabnik")
+    uporabnisko_ime = request.get_cookie("uporabnik")
 
     # iz uporabniškega imena dobimo id pacienta
-    id_pacienta = service.dobi_id_pacienta(uporabniško_ime)
-
+    id_pacienta = service.dobi_id_pacienta(uporabnisko_ime)
+   
     pregledi_dto = service.dobi_preglede_pacient(id_pacienta)  
-        
-    return template_user('profil.html', pregledi = pregledi_dto)
+   
+    return template_user('profil.html', pregledi = pregledi_dto, uporabnisko_ime=uporabnisko_ime)
 
 
 
@@ -87,6 +87,18 @@ def dodaj_pregled_post():
     redirect(url('/'))
 
 
+@get('/prijava')
+def get_prijava():
+    """
+    Prikaže stran za prijavo uporabnika.
+    """
+    # če je uporabnik že prijavljen, ga preusmeri na domačo stran
+    if request.get_cookie("uporabnik"):
+        redirect(url('/'))
+
+    return template("prijava.html", uporabnik=None, napaka=None)
+
+
 
 @post('/prijava')
 def prijava():
@@ -120,7 +132,7 @@ def odjava():
     
     response.delete_cookie("uporabnik")
     
-    return template('prijava.html', uporabnik=None, napaka=None)
+    redirect(url('/'))
 
 
 if __name__ == "__main__":

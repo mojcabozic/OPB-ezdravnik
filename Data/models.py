@@ -10,7 +10,8 @@ class pacient:
     id_pacienta : int = field(default=0)  # Za vsako polje povemo tip in privzeto vrednost
     ime_pacienta : str = field(default="")
     uporabnisko_ime : str = field(default="")
-    starost: int = field(default=0) 
+    geslo_hash: str = field(default="")
+    datum_rojstva: str = field(default=0) 
     spol: str = field(default="")
     reden: str = field(default="")
 
@@ -26,7 +27,7 @@ class pacientDto:
     ime_pacienta : str = field(default="")
     uporabnisko_ime : str = field(default="")
     pregled : int = field(default=0) # dodatno si shranimo se preglede pacienta
-    starost: int = field(default=0) 
+    datum_rojstva: str = field(default=0) 
     spol: str = field(default="")
     reden: str = field(default="")
 
