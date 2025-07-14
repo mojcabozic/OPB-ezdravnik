@@ -58,15 +58,28 @@ def index():
 
 
 
-@get('/pregled')
+@get('/pregled/<id_pregleda>')
 @cookie_required
-def index():
+def pregled(id_pregleda):
     """
-    Stran s podatki o pregledu
+    Stran s podatki o posameznem pregledu
     """   
   
-    pregled = service.dobi_pregled()
-    return template_user('pregled.html', pregled = pregled)
+    pregled = service.dobi_pregled(id_pregleda)
+    # pridobimo podatke o pacientu, zdravniku, oddelku, lokaciji
+    id_pacienta = pregled.pacient
+    id_zdravnika = pregled.zdravnik
+  
+    id_oddelka = service.dobi_zdravnika(id_zdravnika).oddelek
+
+    ime_pacienta = service.dobi_pacienta(id_pacienta).ime_pacienta
+    ime_zdravnika = service.dobi_zdravnika(id_zdravnika).ime_zdravnika
+    id_lokacije = service.dobi_oddelek(id_oddelka).lokacija
+    lokacija = service.dobi_naslov(id_lokacije)
+    
+
+
+    return template_user('pregled.html', pregled = pregled, ime_pacienta=ime_pacienta, ime_zdravnika=ime_zdravnika, lokacija=lokacija)
 
 
 @get('/dodaj_pregled')
@@ -101,7 +114,6 @@ def dodaj_pregled_post():
     ime_zdravnika = service.dobi_zdravnika(zdravnik).ime_zdravnika
     id_lokacije = service.dobi_oddelek(oddelek).lokacija
     lokacija = service.dobi_naslov(id_lokacije)
-    print(lokacija)
     ime_oddelka = service.dobi_oddelek(oddelek).ime_oddelka
 
     

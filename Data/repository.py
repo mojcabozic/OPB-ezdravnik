@@ -31,15 +31,23 @@ class Repo:
         return pregledi
     
     def dobi_pregled(self, id_pregleda: str) -> pregled:
-         self.cur.execute("""
-            SELECT id_pregleda, datum, cas, opis
-            FROM pregled
-            WHERE id_pregleda = %s
+        self.cur.execute("""
+            SELECT 
+                p.id_pregleda, 
+                p.datum, 
+                p.cas, 
+                p.opis,
+                p.pacient,          
+                p.zdravnik, 
+                o.ime_oddelka
+            FROM pregled p
+            JOIN zdravnik z ON p.zdravnik = z.id_zdravnika
+            JOIN oddelek o ON z.oddelek = o.id_oddelka
+            WHERE p.id_pregleda = %s
         """, (id_pregleda,))
-         
-         t = pregled.from_dict(self.cur.fetchone())
-         return t
-
+        
+        return pregledDto.from_dict(self.cur.fetchone())
+        
     
     def dobi_preglede_pacient_dto(self, id_pacienta: int) -> List[pregledDto]:
         self.cur.execute("""

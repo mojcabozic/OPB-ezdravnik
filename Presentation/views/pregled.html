@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregled</title>
+</head>
+<body>
+    Pregled {{pregled.id_pregleda}}
+    <div>Pacient: {{ime_pacienta}}</div>
+    <div>Oddelek: {{pregled.ime_oddelka}}</div>
+    <div>Lokacija: {{lokacija}}</div>
+    <div>Datum pregleda: {{pregled.datum}}</div>
+    <div>Termin pregleda: {{pregled.cas}}</div>
+    <div>Zdravnik: {{ime_zdravnika}}</div>
+    <div>
+        % if pregled.opis: 
+            Opis pregleda: {{pregled.opis}}
+    </div>
+    <a href="/">Nazaj na začetno stran</a>
+</body>
+</html>
