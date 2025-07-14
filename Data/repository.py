@@ -33,24 +33,34 @@ class Repo:
     def dobi_pregled(self, id_pregleda: str) -> pregled:
          self.cur.execute("""
             SELECT id_pregleda, datum, cas, opis
-            FROM transakcija
-            Where id_pregleda = %s
+            FROM pregled
+            WHERE id_pregleda = %s
         """, (id_pregleda,))
          
          t = pregled.from_dict(self.cur.fetchone())
          return t
 
     
-    def dobi_preglede_dto(self) -> List[pregledDto]:
+    def dobi_preglede_pacient_dto(self, id_pacienta: int) -> List[pregledDto]:
         self.cur.execute("""
-            SELECT t.id_pregleda, p.pacient as pacient, t.datum, t.cas, t.zdravnik, t.opis
-            FROM pregled t 
-            left join racun r on t.racun = r.stevilka
-            left join oseba o on o.emso = r.lastnik
-            Order by t.datum desc
-        """)
-
-        pregledi = [pregledDto.from_dict(t) for t in self.cur.fetchall()]
+            SELECT 
+                p.id_pregleda, 
+                p.datum, 
+                p.cas, 
+                p.opis,
+                p.pacient,          
+                p.zdravnik, 
+                o.ime_oddelka
+            FROM pregled p
+            JOIN zdravnik z ON p.zdravnik = z.id_zdravnika
+            JOIN oddelek o ON z.oddelek = o.id_oddelka
+            WHERE p.pacient = %s
+            ORDER BY p.datum DESC
+        """, (id_pacienta,))
+        
+        a = self.cur.fetchall()
+        print(a)
+        pregledi = [pregledDto.from_dict(t) for t in a]
         return pregledi
     
     def dobi_zdravnike(self) -> List[zdravnik]:
@@ -116,7 +126,6 @@ class Repo:
         
         # rezultate querya pretovrimo v python seznam objektov (pregledov)
         a = self.cur.fetchall()
-        print(a)
         pregledi = [pregled.from_dict(t) for t in a]
         return pregledi
     
@@ -180,3 +189,4 @@ class Repo:
         """, (id_lokacije,))
         
         return self.cur.fetchone()[0]  # vrne naslov kot string
+    

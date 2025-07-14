@@ -24,6 +24,9 @@ class PreglediService:
     def dobi_preglede_pacient(self, id_pacienta) -> List[pregled]:
         return self.repo.dobi_preglede_pacient(id_pacienta)
     
+    def dobi_preglede_pacient_dto(self, id_pacienta) -> List[pregled]:
+        return self.repo.dobi_preglede_pacient_dto(id_pacienta)
+    
     def dobi_preglede_dto(self) -> List[pregled]:
         return self.repo.dobi_preglede_dto()
     

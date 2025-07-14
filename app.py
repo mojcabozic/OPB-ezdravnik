@@ -46,9 +46,15 @@ def index():
     # iz uporabniškega imena dobimo id pacienta
     id_pacienta = service.dobi_id_pacienta(uporabnisko_ime)
    
-    pregledi_dto = service.dobi_preglede_pacient(id_pacienta)  
+    pregledi_dto = service.dobi_preglede_pacient_dto(id_pacienta) 
+
+    ime_pacienta = service.dobi_pacienta(id_pacienta).ime_pacienta
+    datum_rojstva = service.dobi_pacienta(id_pacienta).datum_rojstva
+    spol = service.dobi_pacienta(id_pacienta).spol
+    reden = service.dobi_pacienta(id_pacienta).reden 
+
    
-    return template_user('profil.html', pregledi = pregledi_dto, uporabnisko_ime=uporabnisko_ime)
+    return template_user('profil.html', pregledi = pregledi_dto, uporabnisko_ime=uporabnisko_ime, ime_pacienta=ime_pacienta, datum_rojstva=datum_rojstva, spol=spol, reden=reden)
 
 
 

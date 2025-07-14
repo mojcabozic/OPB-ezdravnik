@@ -66,6 +66,9 @@ class pregledDto:
     datum : date = field(default_factory=date.today)
     cas : str = field(default="")
     opis : str = field(default="")
+    pacient : int = field(default=0)
+    zdravnik : int = field(default=0)
+    ime_oddelka: str = field(default="")
 
 @dataclass_json
 @dataclass

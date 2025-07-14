@@ -1,5 +1,49 @@
-{{uporabnisko_ime}}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+</head>
+<body>
+    {{uporabnisko_ime}}
+
+    <div>Ime: {{ime_pacienta}}</div>
+    <div>Datum rojstva: {{datum_rojstva}}</div>
+    <div>Spol: 
+        % if spol == "Female": 
+            Ženski
+        % elif spol == "Male":
+            Moški 
+        % else:
+            Drugo
+        % end
+    </div>
+    <div>Redni pacient:
+        % if reden: 
+            Da
+        % else: 
+            Ne
+        % end
+    </div>
+
+    <div>
+        Moji pregledi
+        <div>
+            % for pregled in pregledi:
+                <div>
+                    <div>Oddelek: {{pregled.ime_oddelka}}</div>
+                    <div>Datum pregleda: {{pregled.datum}}</div>
+                    <a href="/pregled">Pokaži podrobnosti</a>
+                </div>
+            % end
+        </div>
+    </div>
 
 <a href="/odjava">Odjava</a>
 
 <a href="/dodaj_pregled">Dodaj pregled</a>
+</body>
+</html>
