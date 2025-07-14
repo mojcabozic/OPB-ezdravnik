@@ -78,18 +78,29 @@ def dodaj_pregled():
 @post('/dodaj_pregled')
 def dodaj_pregled_post():
     # Preberemo podatke iz forme (oddelek, zdravnik, datum, termin, opis)
-    oddelek = int(request.forms.get('oddelek'))
-    zdravnik = float(request.forms.get('zdravnik'))
+    oddelek = request.forms.get('id_oddelka')
+    zdravnik = float(request.forms.get('id_zdravnika'))
     opis = request.forms.get('opis')
     datum = request.forms.get('datum')
     termin = request.forms.get('termin')
 
     # iz piškotka dobimo podatek o prijavljenem uporabniku
     uporabniško_ime = request.get_cookie("uporabnik")
+    id_pacienta = service.dobi_id_pacienta(uporabniško_ime)
 
-    service.naredi_pregled(uporabniško_ime, oddelek, zdravnik, opis, datum, termin)
+    service.naredi_pregled(uporabniško_ime, zdravnik, opis, datum, termin)
+
+    # pridobimo podatke o pacientu, zdravniku, oddelku, lokaciji
+    ime_pacienta = service.dobi_pacienta(id_pacienta).ime_pacienta
+    ime_zdravnika = service.dobi_zdravnika(zdravnik).ime_zdravnika
+    id_lokacije = service.dobi_oddelek(oddelek).lokacija
+    lokacija = service.dobi_naslov(id_lokacije)
+    print(lokacija)
+    ime_oddelka = service.dobi_oddelek(oddelek).ime_oddelka
+
     
-    redirect(url('/'))
+    return template_user('uspesno_narocanje.html', ime_pacienta=ime_pacienta, ime_zdravnika=ime_zdravnika, datum=datum, termin=termin, ime_oddelka=ime_oddelka, lokacija=lokacija)
+
 
 
 @get('/prijava')

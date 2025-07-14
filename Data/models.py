@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
-from datetime import datetime
+from datetime import datetime, time, date
 
 # definiramo razrede / podatkovne modele
 
@@ -61,18 +61,18 @@ class oddelekDto:
 
 @dataclass_json
 @dataclass
-class pregled:
+class pregledDto:
     id_pregleda : int = field(default=0)  
-    datum : datetime = field(default=datetime.now)
+    datum : date = field(default_factory=date.today)
     cas : str = field(default="")
     opis : str = field(default="")
 
 @dataclass_json
 @dataclass
-class pregledDto:
+class pregled:
     id_pregleda : int = field(default=0)  
-    datum : datetime = field(default=datetime.now)
-    cas : str = field(default="")
+    datum : date = field(default_factory=date.today)
+    cas : time = field(default_factory=lambda: time(0, 0))
     opis : str = field(default="")
     pacient : int = field(default=0)
     zdravnik : int = field(default=0)
@@ -87,3 +87,11 @@ class Uporabnik:
 @dataclass
 class UporabnikDto:
     username: str = field(default="")
+
+
+@dataclass_json
+@dataclass
+class lokacija:
+    id_lokacije: int = field(default=0)
+    naslov: str = field(default="")
+    

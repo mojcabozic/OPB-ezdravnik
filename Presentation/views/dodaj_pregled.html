@@ -8,11 +8,12 @@ import json
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nov pregled</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     <form action="/dodaj_pregled" method="post">
         <select name="id_oddelka" required>
-            <option value="" selected disabled="disabled" >Izberi oddelek</option>
+            <option value="" selected disabled="disabled" >Izberite oddelek</option>
             % for oddelek in oddelki:
                 <option value="{{ oddelek.id_oddelka }}">{{ oddelek.ime_oddelka }}</option>
             % end
@@ -20,7 +21,11 @@ import json
         <select name="id_zdravnika" required id="zdravnik_select" disabled>
             <option value="">Izberi zdravnika</option>
         </select>
+        <input id="datepicker" type="text" placeholder="Izberite datum pregleda" name="datum" required/>
+        <input id="timepicker" type="text" placeholder="Izberite termin pregleda" name="termin" required/>
+        <input type="text" name="opis" placeholder="Vrsta pregleda oz. opis težave">
         <input type="submit" value="Dodaj pregled">
+
     </form>
 </body>
 <script>
@@ -54,4 +59,33 @@ import json
         }
     });
 </script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  flatpickr("#datepicker", {
+    disable: [
+      function(date) {
+        // Disable weekends: Sunday (0) and Saturday (6)
+        return (date.getDay() === 0 || date.getDay() === 6);
+      }
+    ],
+    dateFormat: "d-m-Y"
+  });
+</script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  flatpickr("#timepicker", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",      // 24-hour format; use "h:i K" for 12-hour
+    time_24hr: true,
+    minTime: "08:00",
+    maxTime: "17:00",
+    minuteIncrement: 45,     // Step size, e.g. 30 minutes
+    defaultDate: "08:00"
+  });
+</script>
+
+
 </html>

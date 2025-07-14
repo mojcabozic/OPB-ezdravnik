@@ -5,7 +5,7 @@ import datetime
 import os
 from collections import defaultdict
 
-from Data.models import pacient, zdravnik, pacientDto, pregled, oddelek, oddelekDto, zdravnikDto, pregledDto
+from Data.models import *
 from typing import List
 
 # Preberemo port za bazo iz okoljskih spremenljivk
@@ -55,7 +55,7 @@ class Repo:
     
     def dobi_zdravnike(self) -> List[zdravnik]:
         self.cur.execute("""
-            SELECT id_zdravika, ime_zdravnika, oddelek
+            SELECT id_zdravnika, ime_zdravnika, oddelek
             FROM zdravnik
         """)
         
@@ -66,17 +66,17 @@ class Repo:
     
     def dobi_zdravnika(self, id_zdravnika: str) -> zdravnik:
         self.cur.execute("""
-            SELECT id_zdravika, ime_zdravnika, oddelek
+            SELECT id_zdravnika, ime_zdravnika, oddelek
             FROM zdravnik
             WHERE id_zdravnika = %s
-        """)
+        """, (id_zdravnika,))
          
         z = zdravnik.from_dict(self.cur.fetchone())
         return z
 
     def dobi_zdravnike_dto(self) -> List[zdravnikDto]:
         self.cur.execute("""
-            SELECT id_zdravika, ime_zdravnika, oddelek
+            SELECT id_zdravnika, ime_zdravnika, oddelek
             FROM zdravnik 
                          
         """)
@@ -88,7 +88,7 @@ class Repo:
     
     def dobi_pacienta(self, id_pacienta : str) -> pacient:
         self.cur.execute("""
-            SELECT id_pacienta, ime_pacienta, starost, spol, reden
+            SELECT id_pacienta, ime_pacienta, datum_rojstva, spol, reden
             FROM pacient
             WHERE id_pacienta = %s
         """, (id_pacienta,))
@@ -114,15 +114,17 @@ class Repo:
             WHERE pacient = %s
         """, (id_pacienta,))
         
-        # rezultate querya pretovrimo v python seznam objektov (transkacij)
-        pregledi = [pregled.from_dict(t) for t in self.cur.fetchall()]
+        # rezultate querya pretovrimo v python seznam objektov (pregledov)
+        a = self.cur.fetchall()
+        print(a)
+        pregledi = [pregled.from_dict(t) for t in a]
         return pregledi
     
     def dodaj_pregled(self, t : pregled):
         self.cur.execute("""
-            INSERT into pregled(datum, cas, opis, pacient, zdravnik)
-            VALUES (%s, %s, %s, %s, %s)
-            """, (t.datum, t.cas, t.opis, t.pacient, t.zdravnik))
+            INSERT into pregled(id_pregleda, datum, cas, opis, pacient, zdravnik)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """, (t.id_pregleda, t.datum, t.cas, t.opis, t.pacient, t.zdravnik))
         self.conn.commit()
 
     def dobi_oddelke(self) -> oddelek:
@@ -133,6 +135,16 @@ class Repo:
          
         oddelki = [oddelek.from_dict(t) for t in self.cur.fetchall()]
         return oddelki
+    
+    def dobi_oddelek(self, id_oddelka: str) -> oddelek:
+        self.cur.execute("""
+            SELECT id_oddelka, ime_oddelka, lokacija
+            FROM oddelek
+            WHERE id_oddelka = %s
+        """, (id_oddelka,))
+         
+        o = oddelek.from_dict(self.cur.fetchone())
+        return o
 
     def dobi_uporabnika(self, uporabnisko_ime : str) -> pacient:
         self.cur.execute("""
@@ -159,3 +171,12 @@ class Repo:
             slovar[id_oddelka].append(zdravnik_dto)
         
         return slovar
+    
+    def dobi_naslov(self, id_lokacije: str) -> str:
+        self.cur.execute("""
+            SELECT naslov
+            FROM lokacija
+            WHERE id_lokacije = %s
+        """, (id_lokacije,))
+        
+        return self.cur.fetchone()[0]  # vrne naslov kot string

@@ -33,8 +33,8 @@ CREATE TABLE Zdravnik (
 
 CREATE TABLE Pregled (
     id_pregleda integer NOT NULL primary key,
-    datum time NOT NULL,
-    cas text NOT NULL,
+    datum date NOT NULL,
+    cas time NOT NULL,
     opis text,
     pacient int REFERENCES Pacient(id_pacienta),
     zdravnik int REFERENCES Zdravnik(id_zdravnika)

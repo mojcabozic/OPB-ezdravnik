@@ -1,6 +1,7 @@
 from Data.repository import Repo
 from Data.models import *
 from typing import List
+from random import randint
 
 # datoteka za delo s pregledi
 
@@ -8,8 +9,11 @@ class PreglediService:
     def __init__(self) -> None:
         self.repo = Repo()
 
-    def dobi_pacienta(self) -> pacient:
-        return self.repo.dobi_pacienta()
+    def dobi_pacienta(self, id_pacienta) -> pacient:
+        return self.repo.dobi_pacienta(id_pacienta)
+
+    def dobi_zdravnika(self, id_zdravnika) -> zdravnik:
+        return self.repo.dobi_zdravnika(id_zdravnika)
     
     def dobi_preglede(self) -> List[pregled]:
         return self.repo.dobi_preglede()
@@ -44,6 +48,29 @@ class PreglediService:
     
     def dobi_zdravnike_po_oddelkih(self) -> List[zdravnikDto]:
         return self.repo.dobi_zdravnike_po_oddelkih()
+    
+    def naredi_pregled(self, uporabnisko_ime: str, id_zdravnika: int, opis: str, datum: str, termin: str) -> None:
+        # dobimo id pacienta
+        id_pacienta = self.repo.dobi_id_pacienta(uporabnisko_ime)
+
+        # naredimo pregled
+        nov_pregled = pregled(
+            id_pregleda=randint(10000000, 99999999),  # naključno generirano ID pregleda
+            datum=datum,
+            cas=termin,
+            opis=opis,
+            pacient=id_pacienta,
+            zdravnik=id_zdravnika
+        )
+
+        self.repo.dodaj_pregled(nov_pregled)
+
+    def dobi_oddelek(self, id_oddelka: int) -> str:
+        oddelek = self.repo.dobi_oddelek(id_oddelka)
+        return oddelek 
+    
+    def dobi_naslov(self, id_lokacije: int) -> str:
+        return self.repo.dobi_naslov(id_lokacije)
 
 
         
