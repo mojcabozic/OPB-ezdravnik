@@ -141,20 +141,20 @@ import json
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Podatki, ki jih predloga dobi iz Python-a
+        
         const zdravniki_po_oddelkih = {{! zdravniki_po_oddelkih_json }};
 
-        // Elementi DOM, ki jih bomo uporabljali
+        
         const oddelekSelect = document.getElementById('oddelek_select');
         const zdravnikSelect = document.getElementById('zdravnik_select');
 
-        // Funkcija za posodabljanje seznama zdravnikov
+        
         const posodobi_zdravnik_select = (id_oddelka) => {
             zdravnikSelect.innerHTML = ''; // Vedno najprej počisti prejšnje možnosti
 
             const zdravniki = zdravniki_po_oddelkih[id_oddelka];
             if (zdravniki && zdravniki.length > 0) {
-                // Dodaj placeholder
+                
                 let placeholderOption = new Option("Izberi zdravnika", "");
                 placeholderOption.disabled = true;
                 placeholderOption.selected = true;
@@ -181,25 +181,25 @@ import json
             if (id_oddelka) {
                 posodobi_zdravnik_select(id_oddelka);
             } else {
-                // POPRAVEK: Počisti in onemogoči seznam zdravnikov, če uporabnik prekliče izbiro
+
                 zdravnikSelect.innerHTML = '<option value="">Najprej izberite oddelek</option>';
                 zdravnikSelect.disabled = true;
             }
         });
 
-        // Inicializacija Flatpickr za datum
+        
         flatpickr("#datepicker", {
             disable: [
                 function(date) {
-                    // Onemogoči vikende: nedelja (0) in sobota (6)
+                    // vikendi ne: nedelja (0) in sobota (6)
                     return (date.getDay() === 0 || date.getDay() === 6);
                 }
             ],
-            minDate: "today", // Prepreči izbiro preteklih datumov
+            minDate: "today", // prepreci izbiro preteklih datumov
             dateFormat: "Y-m-d"
         });
 
-        // Inicializacija Flatpickr za uro
+        // ura
         flatpickr("#timepicker", {
             enableTime: true,
             noCalendar: true,

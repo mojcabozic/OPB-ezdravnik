@@ -5,6 +5,7 @@ from Services.pregledi_service import PreglediService
 from Services.auth_service import AuthService
 import os
 import json
+import datetime
 
 # Ustvarimo instance servisov, ki jih potrebujemo. 
 
@@ -119,6 +120,20 @@ def dodaj_pregled_post():
     
     return template_user('uspesno_narocanje.html', ime_pacienta=ime_pacienta, ime_zdravnika=ime_zdravnika, datum=datum, termin=termin, ime_oddelka=ime_oddelka, lokacija=lokacija)
 
+@get('/opravljeni_pregledi')
+def opravljeni_pregledi():
+    """
+    Stran na kateri se nahajajo opravljeni pregledi.  
+    """
+    uporabniško_ime = request.get_cookie("uporabnik")
+    id_pacienta = service.dobi_id_pacienta(uporabniško_ime)
+    ime_pacienta = service.dobi_pacienta(id_pacienta).ime_pacienta
+
+    pregledi = service.dobi_preglede_pacient(id_pacienta)
+    danes = datetime.date.today()
+    opravljeni_pregledi = [p for p in pregledi if p.datum < danes]
+
+    return template_user('opravljeni_pregledi.html', pregledi=opravljeni_pregledi, ime_pacienta=ime_pacienta)
 
 
 @get('/prijava')
