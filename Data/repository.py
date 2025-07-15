@@ -67,7 +67,6 @@ class Repo:
         """, (id_pacienta,))
         
         a = self.cur.fetchall()
-        print(a)
         pregledi = [pregledDto.from_dict(t) for t in a]
         return pregledi
     
