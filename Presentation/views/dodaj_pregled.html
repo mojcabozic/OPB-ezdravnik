@@ -3,89 +3,212 @@ import json
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nov pregled</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 2em;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
+            padding-bottom: 0.5em;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .form-group {
+            margin-bottom: 1.5em;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #fff; /* Dodano za konsistentnost */
+        }
+        .form-control:disabled {
+            background-color: #e9ecef; /* Ozadje za onemogočena polja */
+            cursor: not-allowed;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #B5E61D;
+            box-shadow: 0 0 0 3px rgba(173, 255, 47, 0.25);
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1em;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.1s;
+            background-color: #B5E61D;
+        }
+        .btn:hover {
+            background-color: #B5E61D;
+        }
+        .btn:active {
+            transform: scale(0.99);
+        }
+        .nav-link {
+            text-align: center;
+            margin-top: 1.5em;
+        }
+        .nav-link a {
+            color: #555;
+            text-decoration: none;
+        }
+        .nav-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <form action="/dodaj_pregled" method="post">
-        <select name="id_oddelka" required>
-            <option value="" selected disabled="disabled" >Izberite oddelek</option>
-            % for oddelek in oddelki:
-                <option value="{{ oddelek.id_oddelka }}">{{ oddelek.ime_oddelka }}</option>
-            % end
-        </select>
-        <select name="id_zdravnika" required id="zdravnik_select" disabled>
-            <option value="">Izberi zdravnika</option>
-        </select>
-        <input id="datepicker" type="text" placeholder="Izberite datum pregleda" name="datum" required/>
-        <input id="timepicker" type="text" placeholder="Izberite termin pregleda" name="termin" required/>
-        <input type="text" name="opis" placeholder="Vrsta pregleda oz. opis težave">
-        <input type="submit" value="Dodaj pregled">
+    <div class="container">
+        <h1>Dodaj nov pregled</h1>
+        <form action="/dodaj_pregled" method="post">
+            
+            <div class="form-group">
+                <label for="oddelek_select">Oddelek</label>
+                <select name="id_oddelka" id="oddelek_select" class="form-control" required>
+                    <option value="" selected disabled>Izberite oddelek</option>
+                    % for oddelek in oddelki:
+                        <option value="{{ oddelek.id_oddelka }}">{{ oddelek.ime_oddelka }}</option>
+                    % end
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="zdravnik_select">Zdravnik</label>
+                <select name="id_zdravnika" id="zdravnik_select" class="form-control" required disabled>
+                    <option value="">Najprej izberite oddelek</option>
+                </select>
+            </div>
 
-    </form>
-</body>
-<script>
-    const zdravniki_po_oddelkih = {{! zdravniki_po_oddelkih_json }};
+            <div class="form-group">
+                <label for="datepicker">Datum pregleda</label>
+                <input id="datepicker" type="text" placeholder="Izberite datum..." name="datum" class="form-control" required/>
+            </div>
 
-    const posodobi_zdravnik_select = (id_oddelka) => {
+            <div class="form-group">
+                <label for="timepicker">Ura pregleda</label>
+                <input id="timepicker" type="text" placeholder="Izberite uro..." name="termin" class="form-control" required/>
+            </div>
+            
+            <div class="form-group">
+                <label for="opis">Vrsta pregleda ali kratek opis</label>
+                <input id="opis" type="text" name="opis" placeholder="Npr. MRI hrbtenice, redni pregled..." class="form-control">
+            </div>
+            
+            <button type="submit" class="btn">Dodaj pregled</button>
+
+        </form>
+        <div class="nav-link">
+            <a href="/">Nazaj na profil</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Podatki, ki jih predloga dobi iz Python-a
+        const zdravniki_po_oddelkih = {{! zdravniki_po_oddelkih_json }};
+
+        // Elementi DOM, ki jih bomo uporabljali
+        const oddelekSelect = document.getElementById('oddelek_select');
         const zdravnikSelect = document.getElementById('zdravnik_select');
-        zdravnikSelect.innerHTML = ''; // Clear previous options
-        zdravnikSelect.disabled = false; // Enable the select element
 
-        if (zdravniki_po_oddelkih[id_oddelka]) {
-            const option = document.createElement('option');
-            option.value = ""
-            option.textContent = `Izberi zdravnika`;
-            zdravnikSelect.appendChild(option);
-            zdravnikSelect.disabled = false; // Enable the select element
+        // Funkcija za posodabljanje seznama zdravnikov
+        const posodobi_zdravnik_select = (id_oddelka) => {
+            zdravnikSelect.innerHTML = ''; // Vedno najprej počisti prejšnje možnosti
 
-            zdravniki_po_oddelkih[id_oddelka].forEach(zdravnik => {
-                const option = document.createElement('option');
-                option.value = zdravnik.id_zdravnika;
-                option.textContent = `${zdravnik.ime_zdravnika}`;
-                zdravnikSelect.appendChild(option);
-            });
-        }
-    };
+            const zdravniki = zdravniki_po_oddelkih[id_oddelka];
+            if (zdravniki && zdravniki.length > 0) {
+                // Dodaj placeholder
+                let placeholderOption = new Option("Izberi zdravnika", "");
+                placeholderOption.disabled = true;
+                placeholderOption.selected = true;
+                zdravnikSelect.appendChild(placeholderOption);
 
-    document.querySelector('select[name="id_oddelka"]').addEventListener('change', function() {
-        const id_oddelka = this.value;
-        if (id_oddelka) {
-            posodobi_zdravnik_select(id_oddelka);
-        }
-    });
-</script>
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-  flatpickr("#datepicker", {
-    disable: [
-      function(date) {
-        // Disable weekends: Sunday (0) and Saturday (6)
-        return (date.getDay() === 0 || date.getDay() === 6);
-      }
-    ],
-    dateFormat: "d-m-Y"
-  });
-</script>
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-  flatpickr("#timepicker", {
-    enableTime: true,
-    noCalendar: true,
-    dateFormat: "H:i",      // 24-hour format; use "h:i K" for 12-hour
-    time_24hr: true,
-    minTime: "08:00",
-    maxTime: "17:00",
-    minuteIncrement: 45,     // Step size, e.g. 30 minutes
-    defaultDate: "08:00"
-  });
-</script>
+                // Dodaj zdravnike na seznam
+                zdravniki.forEach(zdravnik => {
+                    const option = new Option(zdravnik.ime_zdravnika, zdravnik.id_zdravnika);
+                    zdravnikSelect.appendChild(option);
+                });
+                zdravnikSelect.disabled = false; // Omogoči izbiro
+            } else {
+                // Če za oddelek ni zdravnikov ali podatkov
+                let noDoctorOption = new Option("Za ta oddelek ni na voljo zdravnikov", "");
+                noDoctorOption.disabled = true;
+                zdravnikSelect.appendChild(noDoctorOption);
+                zdravnikSelect.disabled = true;
+            }
+        };
 
+        // Poslušalec dogodkov, ki se sproži ob spremembi oddelka
+        oddelekSelect.addEventListener('change', function() {
+            const id_oddelka = this.value;
+            if (id_oddelka) {
+                posodobi_zdravnik_select(id_oddelka);
+            } else {
+                // POPRAVEK: Počisti in onemogoči seznam zdravnikov, če uporabnik prekliče izbiro
+                zdravnikSelect.innerHTML = '<option value="">Najprej izberite oddelek</option>';
+                zdravnikSelect.disabled = true;
+            }
+        });
 
+        // Inicializacija Flatpickr za datum
+        flatpickr("#datepicker", {
+            disable: [
+                function(date) {
+                    // Onemogoči vikende: nedelja (0) in sobota (6)
+                    return (date.getDay() === 0 || date.getDay() === 6);
+                }
+            ],
+            minDate: "today", // Prepreči izbiro preteklih datumov
+            dateFormat: "Y-m-d"
+        });
+
+        // Inicializacija Flatpickr za uro
+        flatpickr("#timepicker", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            minTime: "08:00",
+            maxTime: "17:00",
+            minuteIncrement: 30
+        });
+    </script>
+</body>
 </html>

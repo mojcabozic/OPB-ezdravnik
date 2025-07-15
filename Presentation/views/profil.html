@@ -1,49 +1,152 @@
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 2em;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            padding-bottom: 0.5em;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 1.5em;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .user-details div {
+            padding: 8px 0;
+            font-size: 1.1em;
+        }
+        .user-details span {
+            font-weight: bold;
+            display: inline-block;
+            width: 140px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        thead tr {
+            
+            background-color: #B5E61D; 
+            color: #333; 
+        }
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        .actions {
+            margin-top: 2em;
+            text-align: right;
+        }
+        a.btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-primary {
+             
+            background-color: #B5E61D; 
+            color: #333;
+        }
+        .btn-primary:hover {
+            background-color: #B5E61D; 
+        }
+        .btn-secondary {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #c0392b;
+        }
+    </style>
 </head>
 <body>
-    {{uporabnisko_ime}}
 
-    <div>Ime: {{ime_pacienta}}</div>
-    <div>Datum rojstva: {{datum_rojstva}}</div>
-    <div>Spol: 
-        % if spol == "Female": 
-            Ženski
-        % elif spol == "Male":
-            Moški 
-        % else:
-            Drugo
-        % end
-    </div>
-    <div>Redni pacient:
-        % if reden: 
-            Da
-        % else: 
-            Ne
-        % end
-    </div>
+<div class="container">
 
-    <div>
-        Moji pregledi
+    <h1>Profil: {{uporabnisko_ime}}</h1>
+    
+    <div class="user-details">
+        <h2>Osebni podatki</h2>
+        <div><span>Ime:</span> {{ime_pacienta}}</div>
+        <div><span>Datum rojstva:</span> {{datum_rojstva}}</div>
         <div>
-            % for pregled in pregledi:
-                <div>
-                    <div>Oddelek: {{pregled.ime_oddelka}}</div>
-                    <div>Datum pregleda: {{pregled.datum}}</div>
-                    <a href="/pregled/{{pregled.id_pregleda}}">Pokaži podrobnosti</a>
-                </div>
+            <span>Spol:</span>
+            % if spol == "Female": 
+                Ženski
+            % elif spol == "Male":
+                Moški 
+            % else:
+                Drugo
+            % end
+        </div>
+        <div>
+            <span>Redni pacient:</span>
+            % if reden: 
+                Da
+            % else: 
+                Ne
             % end
         </div>
     </div>
 
-<a href="/odjava">Odjava</a>
+    <div>
+        <h2>Moji pregledi</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Oddelek</th>
+                    <th>Datum pregleda</th>
+                    <th>Podrobnosti</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for pregled in pregledi:
+                <tr>
+                    <td>{{pregled.ime_oddelka}}</td>
+                    <td>{{pregled.datum}}</td>
+                    <td><a href="/pregled/{{pregled.id_pregleda}}">Pokaži</a></td>
+                </tr>
+                % end
+            </tbody>
+        </table>
+    </div>
 
-<a href="/dodaj_pregled">Dodaj pregled</a>
+    <div class="actions">
+        <a href="/odjava" class="btn btn-secondary">Odjava</a>
+        <a href="/dodaj_pregled" class="btn btn-primary">Dodaj pregled</a>
+    </div>
+
+</div>
+
 </body>
 </html>
