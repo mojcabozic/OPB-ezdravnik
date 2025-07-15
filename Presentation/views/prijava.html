@@ -3,67 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Prijava</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-        }
-
-        .header {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-
-        .header img {
-            width: 250px; /* Adjust size as needed */
-            height: auto;
-        }
-
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-
-        .login-box h2 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .login-box input[type="text"],
-        .login-box input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .login-box input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #B5E61D;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .login-box input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
@@ -72,19 +12,20 @@
         <img src="/static/logo.png" alt="Logo">
     </div>
 
+    <div class="login-wrapper">
     <!-- Login Form -->
-    <div class="login-container">
-        <div class="login-box">
+        <div class="login-container">
             <h2>Prijava</h2>
             <form action="/prijava" method="post">
                 <input type="text" name="username" placeholder="Uporabniško ime" required>
                 <input type="password" name="password" placeholder="Geslo" required>
                 <input type="submit" value="Prijavi se">
             </form>
-            {{napaka}}
+            % if napaka:
+                <div class="error-message">{{napaka}}</div>
+            % end
         </div>
     </div>
-
 </body>
 </html>
 
