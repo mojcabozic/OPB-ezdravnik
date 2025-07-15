@@ -177,6 +177,32 @@ thead tr {
 tbody tr:hover {
     background-color: #f9f9f9;
 }
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s, transform 0.1s;
+    background-color: #B5E61D;
+}
+.btn:hover {
+    background-color: #B5E61D;
+}
+.btn:active {
+    transform: scale(0.99);
+}
+.page-profil .actions a.btn {
+    display: inline-block;
+    width: auto;
+    margin-left: 10px;
+}
 .actions {
     margin-top: 2em;
     text-align: right;
@@ -244,27 +270,6 @@ label {
     outline: none;
     border-color: #B5E61D;
     box-shadow: 0 0 0 3px rgba(173, 255, 47, 0.25);
-}
-.btn {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 1.1em;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.2s, transform 0.1s;
-    background-color: #B5E61D;
-}
-.btn:hover {
-    background-color: #B5E61D;
-}
-.btn:active {
-    transform: scale(0.99);
 }
 .nav-link {
     text-align: center;
