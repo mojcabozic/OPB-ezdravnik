@@ -64,10 +64,11 @@ class oddelekDto:
 class pregledDto:
     id_pregleda : int = field(default=0)  
     datum : date = field(default_factory=date.today)
-    cas : str = field(default="")
+    cas : time = field(default_factory=date.today)
     opis : str = field(default="")
     pacient : int = field(default=0)
     zdravnik : int = field(default=0)
+    ime_zdravnika: str = field(default="")
     ime_oddelka: str = field(default="")
 
 @dataclass_json

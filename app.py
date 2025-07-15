@@ -123,17 +123,19 @@ def dodaj_pregled_post():
 @get('/opravljeni_pregledi')
 def opravljeni_pregledi():
     """
-    Stran na kateri se nahajajo opravljeni pregledi.  
+    Stran, na kateri se nahajajo opravljeni pregledi.  
     """
     uporabniško_ime = request.get_cookie("uporabnik")
     id_pacienta = service.dobi_id_pacienta(uporabniško_ime)
     ime_pacienta = service.dobi_pacienta(id_pacienta).ime_pacienta
 
+    preglediDto = service.dobi_preglede_pacient_dto(id_pacienta)
     pregledi = service.dobi_preglede_pacient(id_pacienta)
     danes = datetime.date.today()
+    opravljeni_preglediDto = [p for p in preglediDto if p.datum < danes]
     opravljeni_pregledi = [p for p in pregledi if p.datum < danes]
 
-    return template_user('opravljeni_pregledi.html', pregledi=opravljeni_pregledi, ime_pacienta=ime_pacienta)
+    return template_user('opravljeni_pregledi.html', preglediDto=opravljeni_preglediDto, pregledi = opravljeni_pregledi, ime_pacienta=ime_pacienta)
 
 
 @get('/prijava')

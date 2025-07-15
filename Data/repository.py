@@ -57,7 +57,8 @@ class Repo:
                 p.cas, 
                 p.opis,
                 p.pacient,          
-                p.zdravnik, 
+                p.zdravnik,
+                z.ime_zdravnika AS ime_zdravnika, 
                 o.ime_oddelka
             FROM pregled p
             JOIN zdravnik z ON p.zdravnik = z.id_zdravnika
@@ -129,6 +130,7 @@ class Repo:
             SELECT id_pregleda, datum, cas, opis, pacient, zdravnik
             FROM pregled
             WHERE pacient = %s
+            ORDER BY datum DESC
         """, (id_pacienta,))
         
         # rezultate querya pretovrimo v python seznam objektov (pregledov)
