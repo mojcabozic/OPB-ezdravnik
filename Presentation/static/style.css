@@ -7,10 +7,6 @@ body {
     background-color: #f4f7f6;
     color: #333;
     padding: 2em;
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
-    /* min-height: 100vh; */
 }
 .header {
     position: absolute;
@@ -36,7 +32,6 @@ body {
     justify-content: center;
     min-height: 100vh; 
 }
-
 .login-container h2 {
     margin-bottom: 1.5em;
     font-size: 1.8em;
@@ -125,7 +120,7 @@ body {
     background-color: #B5E61D; 
 }
 .back-button:hover {
-    background-color: #B5E61D;
+    background-color: #A2CF17;
 }
 h1 {
     color: #2c3e50;
@@ -179,6 +174,7 @@ table {
 th, td {
     text-align: left;
     padding: 12px;
+    vertical-align: middle;
     border-bottom: 1px solid #ddd;
 }
 .page-opravljeni-pregledi th, .page-opravljeni-pregledi td {
@@ -194,7 +190,6 @@ thead tr {
     background-color: #e9ecef; 
     font-weight: bold; 
 }
-
 tbody tr:hover {
     background-color: #f9f9f9;
 }
@@ -224,15 +219,20 @@ tbody tr:hover {
     cursor: pointer;
 }
 .btn:hover {
-    background-color: #B5E61D;
+    background-color: #A2CF17;
 }
 .btn:active {
     transform: scale(0.99);
 }
+.page-profil .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
 .page-profil .actions a.btn {
     display: inline-block;
     width: auto;
-    margin-left: 10px;
+    margin-left: 0; /* Odstranimo levi margin, ker uporabljamo gap */
 }
 .actions {
     margin-top: 2em;
@@ -247,12 +247,12 @@ a.btn {
     font-weight: bold;
     transition: background-color 0.2s, transform 0.1s;
 }
-.btn-primary {  
+.btn-primary {
     background-color: #B5E61D; 
     color: #333;
 }
 .btn-primary:hover {
-    background-color: #B5E61D; 
+    background-color: #A2CF17; 
 }
 .btn-secondary {
     background-color: #e74c3c;
@@ -274,6 +274,26 @@ a.btn {
 .btn-info:hover {
     background-color: #0069d9;
 }
+
+/* ---- NOVO: Stil za gumb 'Prikaži več' v tabeli ---- */
+.btn-details {
+    background-color: #6c757d; /* Siva barva */
+    color: white !important; /* Uporabimo !important, da preprečimo, da bi povezava ostala modra */
+    padding: 6px 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: normal;
+    transition: background-color 0.2s;
+    display: inline-block; /* Pomembno za pravilen prikaz paddinga */
+}
+.btn-details:hover {
+    background-color: #5a6268;
+    text-decoration: none;
+    color: white;
+}
+/* ---------------------------------------------------- */
+
 .container-profil {
     max-width: 800px;
     margin: auto;
@@ -307,10 +327,10 @@ label {
     font-size: 1em;
     box-sizing: border-box;
     transition: border-color 0.2s, box-shadow 0.2s;
-    background-color: #fff; /* Dodano za konsistentnost */
+    background-color: #fff;
 }
 .form-control:disabled {
-    background-color: #e9ecef; /* Ozadje za onemogočena polja */
+    background-color: #e9ecef;
     cursor: not-allowed;
 }
 .form-control:focus {
@@ -334,7 +354,3 @@ label {
     padding: 40px;
     color: #777;
 }
-
-
-
-

@@ -1,22 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pregled</title>
+    <title>Podrobnosti pregleda</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            padding: 2em;
+        }
+        .container {
+            max-width: 750px;
+            margin: auto;
+            background: #fff;
+            padding: 2.5em;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+            color: #7f8c8d;
+            font-weight: 400;
+            margin-top: -15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #B5E61D;
+        }
+        .details-section {
+            font-size: 1.1em;
+            line-height: 1.9;
+        }
+        .detail-item {
+            display: flex;
+            padding: 12px 5px;
+            border-bottom: 1px solid #f2f2f2;
+        }
+        .detail-item:last-of-type {
+            border-bottom: none;
+        }
+        .detail-item .label {
+            font-weight: bold;
+            color: #555;
+            width: 160px;
+            flex-shrink: 0;
+        }
+        .actions {
+            margin-top: 2.5em;
+            /* Odstranimo flex lastnosti, ker je samo en gumb */
+        }
+        .btn {
+            display: block; /* SPREMEMBA: Gumb je sedaj blok element */
+            width: 100%;    /* SPREMEMBA: Gumb se raztegne čez celotno širino */
+            padding: 12px 25px; /* Povečamo padding za lepši videz */
+            border-radius: 8px; /* Malo večji radij */
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em; /* Malo večja pisava */
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+        .btn-red {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-red:hover {
+            background-color: #c0392b;
+        }
+    </style>
 </head>
 <body>
-    Pregled {{pregled.id_pregleda}}
-    <div>Pacient: {{ime_pacienta}}</div>
-    <div>Oddelek: {{pregled.ime_oddelka}}</div>
-    <div>Lokacija: {{lokacija}}</div>
-    <div>Datum pregleda: {{pregled.datum}}</div>
-    <div>Termin pregleda: {{pregled.cas}}</div>
-    <div>Zdravnik: {{ime_zdravnika}}</div>
-    <div>
-        % if pregled.opis: 
-            Opis pregleda: {{pregled.opis}}
+    <div class="container">
+        
+        <h1>Podrobnosti pregleda</h1>
+        <h2>Pregled #{{pregled.id_pregleda}}</h2>
+
+        <div class="details-section">
+            <div class="detail-item">
+                <span class="label">Pacient:</span>
+                <span class="value">{{ime_pacienta}}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Oddelek:</span>
+                <span class="value">{{pregled.ime_oddelka}}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Lokacija:</span>
+                <span class="value">{{lokacija}}</span>
+            </div>
+             <div class="detail-item">
+                <span class="label">Zdravnik:</span>
+                <span class="value">{{ime_zdravnika}}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Datum:</span>
+                <span class="value">{{pregled.datum.strftime('%d.%m.%Y')}}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Termin:</span>
+                <span class="value">{{pregled.cas.strftime('%H:%M')}}</span>
+            </div>
+            % if pregled.opis: 
+            <div class="detail-item">
+                <span class="label">Opis:</span>
+                <span class="value">{{pregled.opis}}</span>
+            </div>
+            % end
+        </div>
+
+        <div class="actions">
+            <a href="/" class="btn btn-red">Nazaj na profil</a>
+        </div>
+
     </div>
-    <a href="/">Nazaj na začetno stran</a>
 </body>
 </html>
