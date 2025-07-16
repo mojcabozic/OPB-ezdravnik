@@ -9,6 +9,32 @@ class AuthService:
     def __init__(self):
         self.repo = Repo()
 
+    def dodaj_uporabnika(self, uporabnik: str, rola: str, geslo: str) -> UporabnikDto:
+
+        # zgradimo hash za geslo od uporabnika
+
+        # Najprej geslo zakodiramo kot seznam bajtov
+        bytes = geslo.encode('utf-8')
+  
+        # Nato ustvarimo salt
+        salt = bcrypt.gensalt()
+        
+        # In na koncu ustvarimo hash gesla
+        password_hash = bcrypt.hashpw(bytes, salt)
+
+        # Sedaj ustvarimo objekt Uporabnik in ga zapišemo bazo
+
+        u = Uporabnik(
+            username=uporabnik,
+            role=rola,
+            password_hash=password_hash.decode(),
+            last_login= date.today().isoformat()
+        )
+
+        self.repo.dodaj_uporabnika(u)
+
+        return UporabnikDto(username=uporabnik, role=rola)
+
     def obstaja_uporabnik(self, uporabnik: str) -> bool:
         try:
             user = self.repo.dobi_uporabnika(uporabnik)
@@ -29,10 +55,3 @@ class AuthService:
             return UporabnikDto(username=pacient.uporabnisko_ime)
         
         return False
-        
-
-       
-
-       
-
-        
