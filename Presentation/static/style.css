@@ -232,7 +232,7 @@ tbody tr:hover {
 .page-profil .actions a.btn {
     display: inline-block;
     width: auto;
-    margin-left: 0; /* Odstranimo levi margin, ker uporabljamo gap */
+    margin-left: 0; 
 }
 .actions {
     margin-top: 2em;
@@ -275,24 +275,24 @@ a.btn {
     background-color: #0069d9;
 }
 
-/* ---- NOVO: Stil za gumb 'Prikaži več' v tabeli ---- */
+
 .btn-details {
-    background-color: #6c757d; /* Siva barva */
-    color: white !important; /* Uporabimo !important, da preprečimo, da bi povezava ostala modra */
+    background-color: #6c757d; 
+    color: white !important; 
     padding: 6px 14px;
     border-radius: 5px;
     text-decoration: none;
     font-size: 0.9em;
     font-weight: normal;
     transition: background-color 0.2s;
-    display: inline-block; /* Pomembno za pravilen prikaz paddinga */
+    display: inline-block; 
 }
 .btn-details:hover {
     background-color: #5a6268;
     text-decoration: none;
     color: white;
 }
-/* ---------------------------------------------------- */
+
 
 .container-profil {
     max-width: 800px;

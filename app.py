@@ -53,9 +53,10 @@ def index():
     datum_rojstva = service.dobi_pacienta(id_pacienta).datum_rojstva
     spol = service.dobi_pacienta(id_pacienta).spol
     reden = service.dobi_pacienta(id_pacienta).reden 
-
+    danes = datetime.date.today()
+    prihajajoci_pregeledi = [p for p in pregledi_dto if p.datum >= danes]
    
-    return template_user('profil.html', pregledi = pregledi_dto, uporabnisko_ime=uporabnisko_ime, ime_pacienta=ime_pacienta, datum_rojstva=datum_rojstva, spol=spol, reden=reden)
+    return template_user('profil.html', pregledi = prihajajoci_pregeledi, uporabnisko_ime=uporabnisko_ime, ime_pacienta=ime_pacienta, datum_rojstva=datum_rojstva, spol=spol, reden=reden)
 
 
 
