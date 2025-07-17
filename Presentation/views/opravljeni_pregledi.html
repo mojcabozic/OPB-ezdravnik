@@ -27,7 +27,7 @@
                 <tbody>
                     % for pregled in preglediDto:
                     <tr onclick="window.location.href='/pregled/{{pregled.id_pregleda}}';" style="cursor: pointer;">
-                        <td>{{pregled.datum.strftime('%d.%m.%Y')}}</td>
+                        <td>{{pregled.datum.strftime('%d. %m. %Y')}}</td>
                         <td>{{pregled.cas.strftime('%H:%M')}}</td>
                         <td>{{pregled.ime_oddelka}}</td>
                         <td>{{pregled.ime_zdravnika}}</td>

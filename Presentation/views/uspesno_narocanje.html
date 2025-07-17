@@ -23,8 +23,8 @@
         <div class="detail-oddelek">{{ime_oddelka}}</div>
         <div class="detail-lokacija">{{lokacija}}</div>
         <div class="detail-zdravnik">{{ime_zdravnika}}</div>
-        <div class="detail-datum">{{datum}}</div>
-        <div class="detail-termin">{{termin}}</div>
+        <div class="detail-datum">{{datum.strftime('%d. %m. %Y')}}</div>
+        <div class="detail-termin">{{termin.strftime('%H:%M')}}</div>
     </div>
     
     <a href="/" class="back-button">Nazaj na mojo stran</a>
