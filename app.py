@@ -54,9 +54,9 @@ def index():
     spol = service.dobi_pacienta(id_pacienta).spol
     reden = service.dobi_pacienta(id_pacienta).reden 
     danes = datetime.date.today()
-    prihajajoci_pregeledi = [p for p in pregledi_dto if p.datum >= danes]
+    prihajajoci_pregledi = [p for p in pregledi_dto if p.datum >= danes]
    
-    return template_user('profil.html', pregledi = prihajajoci_pregeledi, uporabnisko_ime=uporabnisko_ime, ime_pacienta=ime_pacienta, datum_rojstva=datum_rojstva, spol=spol, reden=reden)
+    return template_user('profil.html', pregledi = prihajajoci_pregledi, uporabnisko_ime=uporabnisko_ime, ime_pacienta=ime_pacienta, datum_rojstva=datum_rojstva, spol=spol, reden=reden)
 
 
 
@@ -117,9 +117,10 @@ def dodaj_pregled_post():
     id_lokacije = service.dobi_oddelek(oddelek).lokacija
     lokacija = service.dobi_naslov(id_lokacije)
     ime_oddelka = service.dobi_oddelek(oddelek).ime_oddelka
-
+    datum_obj = datetime.datetime.strptime(datum, '%d.%m.%Y') # klicemo datetime.datetime, ker imamo namesto from datetime import datetime samo import datetime (prvo je module, drugo class)
+    termin_obj = datetime.datetime.strptime(termin, '%H:%M') 
     
-    return template_user('uspesno_narocanje.html', ime_pacienta=ime_pacienta, ime_zdravnika=ime_zdravnika, datum=datum, termin=termin, ime_oddelka=ime_oddelka, lokacija=lokacija)
+    return template_user('uspesno_narocanje.html', ime_pacienta=ime_pacienta, ime_zdravnika=ime_zdravnika, datum=datum_obj, termin=termin_obj, ime_oddelka=ime_oddelka, lokacija=lokacija)
 
 @get('/opravljeni_pregledi')
 def opravljeni_pregledi():

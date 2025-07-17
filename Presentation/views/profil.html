@@ -19,29 +19,35 @@
     <div class="user-details">
         <h2>Osebni podatki</h2>
         <div><span>Ime:</span> {{ime_pacienta}}</div>
-        <div><span>Datum rojstva:</span> {{datum_rojstva}}</div>
+        <div><span>Datum rojstva:</span> {{datum_rojstva.strftime('%d. %m. %Y')}}</div>
         <div>
             <span>Spol:</span>
             % if spol == "Female": 
-                Ženski
+                ženski
             % elif spol == "Male":
-                Moški 
+                moški 
             % else:
-                Drugo
+                drugo
             % end
         </div>
         <div>
             <span>Redni pacient:</span>
             % if reden: 
-                Da
+                da
             % else: 
-                Ne
+                ne
             % end
         </div>
     </div>
 
     <div>
         <h2>Moji pregledi</h2>
+    
+        <!-- gumb za dodajanje pregleda -->
+        <div class="actions" style="margin-bottom: 1em;">
+            <a href="/dodaj_pregled" class="btn btn-dodaj-pregled">Nov pregled</a>
+        </div>
+    
         <table>
             <thead>
                 <tr>
@@ -51,25 +57,54 @@
                 </tr>
             </thead>
             <tbody>
-                % for pregled in pregledi:
-                <tr>
-                    <td>{{pregled.ime_oddelka}}</td>
-                    <td>{{pregled.datum.strftime('%d. %m. %Y')}}</td>
-                    <td><a href="/pregled/{{pregled.id_pregleda}}" class="btn-details">Prikaži</a></td>
-                </tr>
+                % for i, pregled in enumerate(pregledi):
+                    <tr class="pregled-row{{' hidden' if i >= 5 else ''}}" onclick="window.location.href='/pregled/{{pregled.id_pregleda}}';" style="cursor: pointer;">
+                        <td>{{pregled.ime_oddelka}}</td>
+                        <td>{{pregled.datum.strftime('%d. %m. %Y')}}</td>
+                        <td><a href="/pregled/{{pregled.id_pregleda}}" class="btn-details">Prikaži</a></td>
+                    </tr>
                 % end
             </tbody>
         </table>
-    </div>
 
+        <div class="show-more-wrapper">
+            <img id="show-more" class="toggle-icon" src="/static/show-more.svg" alt="Pokaži več">
+            <img id="show-less" class="toggle-icon" src="/static/show-less.svg" alt="Pokaži manj" style="display: none;">
+        </div>
+    </div>
+    
+    <!-- gumba za prijavo in opravljene preglede -->
     <div class="actions">
-        <a href="/odjava" class="btn btn-secondary">Odjava</a>
+        <a href="/odjava" class="btn btn-red">Odjava</a>
         <a href="/opravljeni_pregledi" class="btn btn-info">Opravljeni pregledi</a>
-        
-        <a href="/dodaj_pregled" class="btn btn-primary">Dodaj pregled</a>
     </div>
 
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const showMoreBtn = document.getElementById("show-more");
+        const showLessBtn = document.getElementById("show-less");
+        const rows = document.querySelectorAll(".pregled-row");
+
+        showMoreBtn.addEventListener("click", function () {
+            rows.forEach((row, index) => {
+                if (index >= 5) row.classList.remove("hidden");
+            });
+            showMoreBtn.style.display = "none";
+            showLessBtn.style.display = "inline-block";
+        });
+
+        showLessBtn.addEventListener("click", function () {
+            rows.forEach((row, index) => {
+                if (index >= 5) row.classList.add("hidden");
+            });
+            showLessBtn.style.display = "none";
+            showMoreBtn.style.display = "inline-block";
+            window.scrollTo({ top: document.querySelector("table").offsetTop, behavior: 'smooth' });
+        });
+    });
+</script>
 
 </body>
 </html>

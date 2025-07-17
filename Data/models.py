@@ -11,7 +11,7 @@ class pacient:
     ime_pacienta : str = field(default="")
     uporabnisko_ime : str = field(default="")
     geslo_hash: str = field(default="")
-    datum_rojstva: str = field(default=0) 
+    datum_rojstva: date = field(default_factory=date.today)
     spol: str = field(default="")
     reden: str = field(default="")
 

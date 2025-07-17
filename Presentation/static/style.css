@@ -8,6 +8,9 @@ body {
     color: #333;
     padding: 2em;
 }
+.hidden {
+    display: none;
+}
 .header {
     position: absolute;
     top: 20px;
@@ -72,10 +75,18 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     text-align: center; 
 }
+.page-pregled .container {
+    max-width: 750px;
+    margin: auto;
+    background: #fff;
+    padding: 2.5em;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+} 
 .success-icon {
     width: 80px;
     height: 80px;
-    color: #28a745; 
+    color: #25B24B; 
 }
 .success-message {
     font-size: 1.5em;
@@ -99,6 +110,20 @@ body {
     color: #555;
     display: inline-block;
     width: 150px;
+}
+.detail-item {
+    display: flex;
+    padding: 12px 5px;
+    border-bottom: 1px solid #f2f2f2;
+}
+.detail-item:last-of-type {
+    border-bottom: none;
+}
+.detail-item .label {
+    font-weight: bold;
+    color: #555;
+    width: 160px;
+    flex-shrink: 0;
 }
 .detail-pacient::before { content: "Pacient:"; }
 .detail-oddelek::before { content: "Oddelek:"; }
@@ -128,25 +153,39 @@ h1 {
     padding-bottom: 0.5em;
     border-bottom: 2px solid #f0f0f0;
 }
+.page-pregled h1 {
+    color: #2c3e50;
+    margin-top: 0;
+    text-align: center;
+}
 .page-profil h1 {
     color: #2c3e50;
     margin-top: 0;
     padding-bottom: 0.5em;
     border-bottom: 2px solid #f0f0f0;
 }
-.page-opravljeni-pregledi h1{
+.page-opravljeni-pregledi h1 {
     color: #2c3e50;
     margin-top: 0;
     padding-bottom: 0.5em;
     border-bottom: 1px solid #eee;
 }
-.page-dodaj_pregled h1 {
+.page-dodaj-pregled h1 {
     color: #2c3e50;
     margin-top: 0;
     padding-bottom: 0.5em;
     border-bottom: 2px solid #f0f0f0;
 }
 h2 {
+    text-align: center;
+    color: #7f8c8d;
+    font-weight: 400;
+    margin-top: -15px;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #B5E61D;
+}
+.page-profil h2 {
     color: #34495e;
     margin-top: 1.5em;
     padding-bottom: 0.5em;
@@ -160,6 +199,10 @@ h2 {
     font-weight: bold;
     display: inline-block;
     width: 140px;
+}
+.details-section {
+    font-size: 1.1em;
+    line-height: 1.9;
 }
 table {
     width: 100%;
@@ -208,6 +251,19 @@ tbody tr:hover {
     transition: background-color 0.2s, transform 0.1s;
     background-color: #B5E61D;
 }
+.page-pregled .btn{
+    display: block; /* SPREMEMBA: Gumb je sedaj blok element */
+    width: 100%;    /* SPREMEMBA: Gumb se raztegne čez celotno širino */
+    padding: 12px 25px; /* Povečamo padding za lepši videz */
+    border-radius: 8px; /* Malo večji radij */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em; /* Malo večja pisava */
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s;
+}
 .page-opravljeni-pregledi .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -223,6 +279,10 @@ tbody tr:hover {
 }
 .btn:active {
     transform: scale(0.99);
+}
+.page-pregled .actions {
+    margin-top: 2.5em;
+    /* Odstranimo flex lastnosti, ker je samo en gumb */
 }
 .page-profil .actions {
     display: flex;
@@ -247,35 +307,41 @@ a.btn {
     font-weight: bold;
     transition: background-color 0.2s, transform 0.1s;
 }
-.btn-primary {
-    background-color: #B5E61D; 
-    color: #333;
+.btn-dodaj-pregled {
+    background-color: #B5E61D;
+    color: #000;
+    font-weight: bold;
+    border: 2px solid #8EBC15;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
 }
-.btn-primary:hover {
-    background-color: #A2CF17; 
+.btn-dodaj-pregled:hover {
+    background-color: #A2CF17;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
-.btn-secondary {
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+}
+.btn-red {
     background-color: #e74c3c;
     color: white;
 }
-.page-opravljeni-pregledi .btn-secondary {
-    background-color: #6c757d;
-}
-.btn-secondary:hover {
+.btn-red:hover {
     background-color: #c0392b;
 }
-.page-opravljeni-pregledi .btn-secondary:hover {
+.btn-back:hover {
     background-color: #5a6268;
+    color: white;
 }
 .btn-info {
-    background-color: #007bff;
+    background-color: #25B24B;
     color: white;
 }
 .btn-info:hover {
-    background-color: #0069d9;
+    background-color: #1E903C;
 }
-
-
 .btn-details {
     background-color: #6c757d; 
     color: white !important; 
@@ -292,8 +358,6 @@ a.btn {
     text-decoration: none;
     color: white;
 }
-
-
 .container-profil {
     max-width: 800px;
     margin: auto;
@@ -353,4 +417,20 @@ label {
     text-align: center;
     padding: 40px;
     color: #777;
+}
+.toggle-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 1em;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.toggle-icon:hover {
+    opacity: 1;
+}
+.show-more-wrapper {
+    text-align: center;
+    margin-top: 1em;
 }
