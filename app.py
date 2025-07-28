@@ -101,14 +101,14 @@ def dodaj_pregled_post():
     # Preberemo podatke iz forme (oddelek, zdravnik, datum, termin, opis)
     oddelek = request.forms.get('id_oddelka')
     zdravnik = float(request.forms.get('id_zdravnika'))
-    opis = request.forms.get('opis')
+    opis = request.forms.opis
     datum = request.forms.get('datum')
     termin = request.forms.get('termin')
 
     # iz piškotka dobimo podatek o prijavljenem uporabniku
     uporabniško_ime = request.get_cookie("uporabnik")
     id_pacienta = service.dobi_id_pacienta(uporabniško_ime)
-
+    print(f"{opis} v filu app.py")
     service.naredi_pregled(uporabniško_ime, zdravnik, opis, datum, termin)
 
     # pridobimo podatke o pacientu, zdravniku, oddelku, lokaciji

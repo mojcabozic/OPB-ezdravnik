@@ -43,7 +43,6 @@ class PreglediService:
             pacient = p.id_pacienta,
             zdravnik = z.id_zdravnika
         )
-
         self.repo.dodaj_pregled(pr)
 
     def dobi_id_pacienta(self, uporabnisko_ime: str) -> int:

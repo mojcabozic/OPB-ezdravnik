@@ -65,7 +65,7 @@ class Repo:
             JOIN zdravnik z ON p.zdravnik = z.id_zdravnika
             JOIN oddelek o ON z.oddelek = o.id_oddelka
             WHERE p.pacient = %s
-            ORDER BY p.datum DESC
+            ORDER BY p.datum ASC
         """, (id_pacienta,))
         
         a = self.cur.fetchall()
@@ -131,7 +131,7 @@ class Repo:
             SELECT id_pregleda, datum, cas, opis, pacient, zdravnik
             FROM pregled
             WHERE pacient = %s
-            ORDER BY datum DESC
+            ORDER BY datum ASC
         """, (id_pacienta,))
         
         # rezultate querya pretovrimo v python seznam objektov (pregledov)
